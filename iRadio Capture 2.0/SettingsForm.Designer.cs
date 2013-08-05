@@ -83,6 +83,7 @@ namespace iRadio_Capture_2._0
             // 
             this.checkBox2.AutoSize = true;
             this.checkBox2.Checked = global::iRadio_Capture_2._0.Properties.Settings.Default.addToiTunesPlaylist;
+            this.checkBox2.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBox2.DataBindings.Add(new System.Windows.Forms.Binding("Checked", global::iRadio_Capture_2._0.Properties.Settings.Default, "addToiTunesPlaylist", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.checkBox2.Location = new System.Drawing.Point(7, 43);
             this.checkBox2.Name = "checkBox2";
@@ -194,7 +195,7 @@ namespace iRadio_Capture_2._0
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(133, 13);
             this.label1.TabIndex = 6;
-            this.label1.Text = "Network Adapeter Numder";
+            this.label1.Text = "Network Adapeter Number";
             // 
             // textBox3
             // 
