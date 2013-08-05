@@ -1,0 +1,43 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iRadio Capture 2.0", "iRadio Capture 2.0\iRadio Capture 2.0.csproj", "{6A85A388-18AE-4C30-90D6-301B288BD533}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{567B024F-4BC2-4988-888F-D6D294174BAC}"
+EndProject
+Project("{6141683F-8A12-4E36-9623-2EB02B2C2303}") = "Setup1", "Setup1\Setup1.isproj", "{599806C5-CE58-49A8-A042-2782D815B278}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		CD_ROM|Any CPU = CD_ROM|Any CPU
+		Debug|Any CPU = Debug|Any CPU
+		DVD-5|Any CPU = DVD-5|Any CPU
+		Release|Any CPU = Release|Any CPU
+		SingleImage|Any CPU = SingleImage|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6A85A388-18AE-4C30-90D6-301B288BD533}.CD_ROM|Any CPU.ActiveCfg = Release|Any CPU
+		{6A85A388-18AE-4C30-90D6-301B288BD533}.CD_ROM|Any CPU.Build.0 = Release|Any CPU
+		{6A85A388-18AE-4C30-90D6-301B288BD533}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6A85A388-18AE-4C30-90D6-301B288BD533}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6A85A388-18AE-4C30-90D6-301B288BD533}.DVD-5|Any CPU.ActiveCfg = Debug|Any CPU
+		{6A85A388-18AE-4C30-90D6-301B288BD533}.DVD-5|Any CPU.Build.0 = Debug|Any CPU
+		{6A85A388-18AE-4C30-90D6-301B288BD533}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6A85A388-18AE-4C30-90D6-301B288BD533}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6A85A388-18AE-4C30-90D6-301B288BD533}.SingleImage|Any CPU.ActiveCfg = Release|Any CPU
+		{6A85A388-18AE-4C30-90D6-301B288BD533}.SingleImage|Any CPU.Build.0 = Release|Any CPU
+		{599806C5-CE58-49A8-A042-2782D815B278}.CD_ROM|Any CPU.ActiveCfg = CD_ROM
+		{599806C5-CE58-49A8-A042-2782D815B278}.CD_ROM|Any CPU.Build.0 = CD_ROM
+		{599806C5-CE58-49A8-A042-2782D815B278}.Debug|Any CPU.ActiveCfg = DVD-5
+		{599806C5-CE58-49A8-A042-2782D815B278}.Debug|Any CPU.Build.0 = DVD-5
+		{599806C5-CE58-49A8-A042-2782D815B278}.DVD-5|Any CPU.ActiveCfg = DVD-5
+		{599806C5-CE58-49A8-A042-2782D815B278}.DVD-5|Any CPU.Build.0 = DVD-5
+		{599806C5-CE58-49A8-A042-2782D815B278}.Release|Any CPU.ActiveCfg = SingleImage
+		{599806C5-CE58-49A8-A042-2782D815B278}.Release|Any CPU.Build.0 = SingleImage
+		{599806C5-CE58-49A8-A042-2782D815B278}.SingleImage|Any CPU.ActiveCfg = SingleImage
+		{599806C5-CE58-49A8-A042-2782D815B278}.SingleImage|Any CPU.Build.0 = SingleImage
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

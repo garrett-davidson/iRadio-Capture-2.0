@@ -1,0 +1,11 @@
+v0.2 - 10/29/2006
+ -Merged patches from Julien Bernard:
+  -Option to read pcap files directly instead of listening from a network interface
+  -Option to create subdirectories by client IP addresses
+  -Option to specify a pcap filter
+  -Option to specify a MIME type filter
+ -Added cookie support (-cookie option)
+ -Fix for filepaths >256 chars on Windows
+
+v0.1 - 8/20/2004
+ -Initial release
