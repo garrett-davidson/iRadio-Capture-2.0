@@ -42,13 +42,15 @@ namespace iRadio_Capture_2._0
         string songFolder;
         string previousImagePath;
         bool started;
+        bool taggingInProgress = false;
+        bool songBuffering = false;
         System.Diagnostics.Process assnifferProcess;
 
         public Form1()
         {
             InitializeComponent();
             downloadsWatcher = new FileSystemWatcher(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + @"\Downloads");
-            downloadsWatcher.Renamed += downloadsWatcher_Created;
+            downloadsWatcher.Renamed += downloadsWatcher_Renamed;
             string path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\iRadio Capture 2.0";
             if (!Directory.Exists(path)) Directory.CreateDirectory(path);
             songWatcher = new FileSystemWatcher(path);
@@ -56,6 +58,7 @@ namespace iRadio_Capture_2._0
             songWatcher.Created += songWatcher_Created;
 
             songFound = false;
+            statusLabel.Text = "";
 
             this.FormClosed += Form1_FormClosed;
             
@@ -67,6 +70,10 @@ namespace iRadio_Capture_2._0
                 Settings.Default.songStorage = paths;
                 Settings.Default.Save();
             }
+
+            //clean up from the previous time
+            //in case of unexpected closing
+            Form1_FormClosed(null, null);
         }
 
         void Form1_FormClosed(object sender, FormClosedEventArgs e)
@@ -89,7 +96,7 @@ namespace iRadio_Capture_2._0
                     Directory.Delete(dir, true);
                 }
                 string[] files = Directory.GetFiles(path);
-                pictureBox1.Image.Dispose();
+                //pictureBox1.Image.Dispose();
                 foreach (string file in files)
                 {
                     System.IO.File.Delete(file);
@@ -101,6 +108,16 @@ namespace iRadio_Capture_2._0
 
         void songWatcher_Created(object sender, FileSystemEventArgs e)
         {
+            //do NOT remove this
+            //sometimes this event fires before all subfolders are created
+            //causing crashes/unpredictable behavior
+            Thread.Sleep(500);
+
+            while (taggingInProgress)
+            {
+                Thread.Sleep(5000);
+            }
+
             //if its not album art
             if (!e.Name.Contains(@".jpg"))
             {
@@ -111,51 +128,86 @@ namespace iRadio_Capture_2._0
                 string song = null;
                 while (song == null)
                 {
-                    try
+                    stuff = Directory.GetDirectories(sub);
+                    
+
+                    if (stuff.Count() > 0)
                     {
-                        stuff = Directory.GetDirectories(sub);
                         sub = stuff[0];
-                        contents = Directory.GetFiles(sub);
-                        song = contents[0];
                     }
 
-                    catch
+                    else
                     {
+                        contents = Directory.GetFiles(sub);
+                        song = contents[0];
                     }
                 }
                 FileInfo inf = new FileInfo(song);
                 long size = 0;
+                songBuffering = true;
                 while (size != inf.Length)
                 {
                     size = inf.Length;
                     Thread.Sleep(5000);
                     inf.Refresh();
                 }
+                songBuffering = false;
 
-                songFound = true;
                 songPath = song;
                 songFolder = e.FullPath;
+                //this must come LAST
+                //otherwise downloadsWatcher_Renamed may continue before the above finishes
+                songFound = true;
             }
         }
 
-        void downloadsWatcher_Created(object sender, FileSystemEventArgs e)
+        void downloadsWatcher_Renamed(object sender, FileSystemEventArgs e)
         {
-            if (!e.Name.Contains(@".crdownload"))
+
+            while (taggingInProgress)
             {
-                if (e.Name.Contains(@".jpg")) {
+                Thread.Sleep(5000);
+            }
+
+            if (e.Name.Contains(@".jpg"))
+            {
+                //while (e.Name.Contains(@".crdownload"))
+                {
+                //    Thread.Sleep(500);
+                }
+
+                if (!e.Name.Contains(@".crdownload"))
+                {
+                    
+                    string newImagePath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\iRadio Capture 2.0\" + e.Name;
+
+                    //Not functionally significant
+                    //However removing causes Chrome to say:
+                    //"Anti-virus software failed unexpectedly while scanning this file."
+                    //when each picture is downloaded
+                    Thread.Sleep(100);
+
+
+                    System.IO.File.Move(e.FullPath, newImagePath);                    
+                    
+                    #region Update UI
+
+                    string[] tags = e.Name.Split('_');
+
+                    updateUI(tags, newImagePath);
+
+                    #endregion
 
                     while (!songFound)
                     {
                         Thread.Sleep(5000);
                     }
+                    taggingInProgress = true;
                     songFound = false;
-
-                    string newImagePath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\iRadio Capture 2.0\" + e.Name;
-                    System.IO.File.Move(e.FullPath, newImagePath);                    
 
                     #region Song Tagging
                     int oldBitrate;
-                    string[] tags = e.Name.Split('_');
+                    
 
                     //must change the extension for Last.fm
                     if (tags[3].Contains(@"last"))
@@ -195,9 +247,12 @@ namespace iRadio_Capture_2._0
                     bool duplicate = false;
                     bool overWritten = false;
 
+                    //the if statement is not in the region
+                    //so you can step over it without expanding the region
+                    if (Settings.Default.customFolder)
                     #region Custom Folder Duplicate Checking and Song Saving
                     //Add song to custom folder
-                    if (Settings.Default.customFolder)
+                    
                     {
 
                         string path = Settings.Default.songStorage;
@@ -313,24 +368,20 @@ namespace iRadio_Capture_2._0
 
                     #region Update UI
                     //create info string
-                    string songInfoString;
-                    if (duplicate) songInfoString = @"Duplicate: ";
-                    else if (overWritten) songInfoString = @"Overwrote: ";
-                    else songInfoString = @"Added: ";
-                    songInfoString += tags[0] + @" by " + tags[1] + @" on " + tags[2];
+                    string statusString = "";
+                    if (duplicate) statusString = @"Duplicate";
+                    else if (overWritten) statusString = @"Overwrote";
+                    else statusString = @"Added";
 
                     //update UI
-                    if (pictureBox1.Image != null) pictureBox1.Image.Dispose();
-                    pictureBox1.Invoke(new MethodInvoker(delegate { pictureBox1.Image = Image.FromFile(newImagePath); }));
-                    label1.Invoke(new MethodInvoker(delegate { label1.Text = songInfoString; }));
+                    statusLabel.Invoke(new MethodInvoker(delegate { statusLabel.Text = statusString; }));
 
-                    if (previousImagePath != null) System.IO.File.Delete(previousImagePath);
-                    previousImagePath = newImagePath;
 
                     #endregion
 
                     
                     Directory.Delete(songFolder, true);
+                    taggingInProgress = false;
                 }
             }
         }
@@ -367,6 +418,30 @@ namespace iRadio_Capture_2._0
                 button1.Text = @"Start";
                 downloadsWatcher.EnableRaisingEvents = true;
                 songWatcher.EnableRaisingEvents = true;
+            }
+        }
+
+        private void updateUI(string[] tags, string imagePath)
+        {
+            if (songBuffering)
+            {
+                statusLabel.Invoke(new MethodInvoker(delegate { statusLabel.Text = @"Buffering"; }));
+
+                string songInfoString;
+                songInfoString = tags[0] + @" by " + tags[1] + @" on " + tags[2];
+
+                //update UI
+                if (pictureBox1.Image != null) pictureBox1.Image.Dispose();
+                pictureBox1.Invoke(new MethodInvoker(delegate { pictureBox1.Image = Image.FromFile(imagePath); }));
+                label1.Invoke(new MethodInvoker(delegate { label1.Text = songInfoString; }));
+
+                if (previousImagePath != null) System.IO.File.Delete(previousImagePath);
+                previousImagePath = imagePath;
+            }
+
+            else
+            {
+                statusLabel.Invoke(new MethodInvoker(delegate { statusLabel.Text = @"Error"; }));
             }
         }
 

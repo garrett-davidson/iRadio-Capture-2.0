@@ -52,6 +52,7 @@ namespace iRadio_Capture_2._0
             this.preferencesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.label1 = new System.Windows.Forms.Label();
+            this.statusLabel = new System.Windows.Forms.Label();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
@@ -97,25 +98,35 @@ namespace iRadio_Capture_2._0
             this.pictureBox1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.pictureBox1.Location = new System.Drawing.Point(12, 53);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(260, 180);
+            this.pictureBox1.Size = new System.Drawing.Size(260, 240);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox1.TabIndex = 2;
             this.pictureBox1.TabStop = false;
             // 
             // label1
             // 
-            this.label1.Location = new System.Drawing.Point(0, 236);
+            this.label1.Location = new System.Drawing.Point(0, 312);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(284, 26);
             this.label1.TabIndex = 3;
             this.label1.Text = "iRadio Capture";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
+            // statusLabel
+            // 
+            this.statusLabel.Location = new System.Drawing.Point(0, 296);
+            this.statusLabel.Name = "statusLabel";
+            this.statusLabel.Size = new System.Drawing.Size(284, 16);
+            this.statusLabel.TabIndex = 4;
+            this.statusLabel.Text = "Status";
+            this.statusLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(284, 262);
+            this.ClientSize = new System.Drawing.Size(284, 340);
+            this.Controls.Add(this.statusLabel);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.menuStrip1);
@@ -126,7 +137,7 @@ namespace iRadio_Capture_2._0
             this.MaximizeBox = false;
             this.Name = "Form1";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
-            this.Text = "Form1";
+            this.Text = "iRadio Capture 2.0";
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
@@ -143,6 +154,7 @@ namespace iRadio_Capture_2._0
         private System.Windows.Forms.ToolStripMenuItem preferencesToolStripMenuItem;
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label statusLabel;
     }
 }
 
